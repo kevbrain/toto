@@ -2,6 +2,11 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: toto-dev
+  labels:
+    app.kubernetes.io/instance: cluster-configs-dev
+    its4u.com/env: dev
+    its4u.com/team: dream-team
+    its4u.com/value-chain: freeLance
   annotations:
       openshift.io/requester: OCP BootStrapper
 spec:
