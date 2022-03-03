@@ -1,0 +1,11 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: Trigger
+metadata:
+  name: toto-dev-trigger
+  namespace: toto-dev
+spec:
+  serviceAccountName: pipeline
+  bindings:
+    - ref: toto-dev-triggerbinding
+  template:
+    ref: toto-dev-triggertemplate

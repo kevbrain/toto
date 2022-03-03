@@ -1,0 +1,12 @@
+kind: Secret
+apiVersion: v1
+metadata:
+  namespace: {{ocp-namespace}}
+  name: toto-secret-0
+  labels:
+    app: toto    
+stringData:  
+  actuator.password: {{actuator.password}}
+type: Opaque
+---
+ 

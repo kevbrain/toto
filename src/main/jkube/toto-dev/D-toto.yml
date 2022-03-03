@@ -1,0 +1,115 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: {{ocp-namespace}}
+  annotations:
+    its4u.placeholders/auto: "true"
+    reloader.stakater.com/auto: "true"
+  name: toto
+  labels:
+    app: toto
+spec:
+  replicas: {{ocp.replicas}}
+  selector:
+    matchLabels:
+      app: toto
+  template:
+    metadata:
+      name: toto
+      labels:
+        app: toto
+    spec:
+      volumes:
+        - name: emptydir-vol-0
+          emptyDir: {}
+      containers:
+        - name: microservice-pod 
+          resources:
+            requests:
+              memory: {{app-request.memory}}
+              cpu : {{app-request.cpu}}
+            limits:
+              memory: {{app-limit.memory}}
+              cpu : {{app-limit.cpu}}
+          readinessProbe:
+            httpGet:
+              path: actuator/health
+              port: {{app-actuator.port}}
+              scheme: HTTP
+          env:
+            - name: app-actuator.port
+              valueFrom:
+                configMapKeyRef:
+                  name: toto-cm-0
+                  key: app-actuator.port
+            - name: app-container.port
+              valueFrom:
+                configMapKeyRef:
+                  name: toto-cm-0
+                  key: app-container.port
+            - name: app-limit.cpu
+              valueFrom:
+                configMapKeyRef:
+                  name: toto-cm-0
+                  key: app-limit.cpu
+            - name: app-limit.memory
+              valueFrom:
+                configMapKeyRef:
+                  name: toto-cm-0
+                  key: app-limit.memory
+            - name: app-request.cpu
+              valueFrom:
+                configMapKeyRef:
+                  name: toto-cm-0
+                  key: app-request.cpu
+            - name: app-request.memory
+              valueFrom:
+                configMapKeyRef:
+                  name: toto-cm-0
+                  key: app-request.memory
+            - name: app-version
+              valueFrom:
+                configMapKeyRef:
+                  name: toto-cm-0
+                  key: app-version
+            - name: cluster-suffix
+              valueFrom:
+                configMapKeyRef:
+                  name: toto-cm-0
+                  key: cluster-suffix
+            - name: ocp.environment
+              valueFrom:
+                configMapKeyRef:
+                  name: toto-cm-0
+                  key: ocp.environment
+            - name: ocp.replicas
+              valueFrom:
+                configMapKeyRef:
+                  name: toto-cm-0
+                  key: ocp.replicas
+            - name: ocp-cluster.registry
+              valueFrom:
+                configMapKeyRef:
+                  name: toto-cm-0
+                  key: ocp-cluster.registry
+            - name: ocp-namespace
+              valueFrom:
+                configMapKeyRef:
+                  name: toto-cm-0
+                  key: ocp-namespace
+            - name: actuator.password
+              valueFrom:
+                secretKeyRef:
+                  name: toto-secret-0
+                  key: actuator.password
+          ports:
+            - containerPort: {{app-container.port}}
+              protocol: TCP
+              name: http
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: emptydir-vol-0
+              mountPath: /Logs
+          image: >-
+            {{ocp-cluster.registry}}/{{ocp-namespace}}/toto:{{app-version}}
+      restartPolicy: Always

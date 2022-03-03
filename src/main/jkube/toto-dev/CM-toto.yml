@@ -1,0 +1,21 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  namespace: {{ocp-namespace}}
+  name: toto-cm-0
+  labels:
+    app: toto
+data: 
+  app-actuator.port: "{{app-actuator.port}}"
+  app-container.port: "{{app-container.port}}"
+  app-limit.cpu: "{{app-limit.cpu}}"
+  app-limit.memory: "{{app-limit.memory}}"
+  app-request.cpu: "{{app-request.cpu}}"
+  app-request.memory: "{{app-request.memory}}"
+  app-version: "{{app-version}}"
+  cluster-suffix: "{{cluster-suffix}}"
+  ocp.environment: "{{ocp.environment}}"
+  ocp.replicas: "{{ocp.replicas}}"
+  ocp-cluster.registry: "{{ocp-cluster.registry}}"
+  ocp-namespace: "{{ocp-namespace}}"
+---
